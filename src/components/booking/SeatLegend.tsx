@@ -1,0 +1,2 @@
+"use client";
+export function SeatLegend(){return <div className="flex flex-wrap justify-center gap-5 text-xs text-fg-secondary"><span className="flex items-center gap-2"><i className="size-3 rounded-sm bg-seat-available"/>Tersedia</span><span className="flex items-center gap-2"><i className="size-3 rounded-sm bg-primary"/>Dipilih</span><span className="flex items-center gap-2"><i className="size-3 rounded-sm bg-seat-taken"/>Terisi</span></div>}

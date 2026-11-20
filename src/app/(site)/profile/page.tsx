@@ -1,0 +1,12 @@
+"use client";
+import { useEffect,useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { reservationService } from "@/services";
+import type { Reservation } from "@/types/api";
+import { Container } from "@/components/ui/section";
+import { ErrorState } from "@/components/ui/state";
+import { ReservationStatusBadge } from "@/components/ui/badge";
+import { formatDateTime } from "@/lib/utils";
+import { getErrorMessage } from "@/lib/errors";
+import Link from "next/link";
+export default function ProfilePage(){const {user}=useAuth();const [items,setItems]=useState<Reservation[]>([]),[error,setError]=useState(""),[loading,setLoading]=useState(true);useEffect(()=>{void reservationService.list().then(setItems).catch(e=>setError(getErrorMessage(e))).finally(()=>setLoading(false))},[]);return <Container navOffset className="max-w-3xl py-10"><p className="mb-2 text-sm font-semibold uppercase tracking-[.2em] text-primary">Akun CINEMAX</p><h1 className="mb-8 text-3xl font-bold">Profil Saya</h1><section className="rounded-card bg-surface p-6"><p className="text-xs uppercase tracking-wider text-fg-muted">Alamat email</p><p className="mt-2 text-lg font-semibold">{user?.email}</p><p className="mt-4 text-xs uppercase tracking-wider text-fg-muted">Peran</p><p className="mt-2 text-sm">{user?.role==="ADMIN"?"Administrator":"Pengguna"}</p>{user?.createdAt&&<><p className="mt-4 text-xs uppercase tracking-wider text-fg-muted">Anggota sejak</p><p className="mt-2 text-sm">{new Date(user.createdAt).toLocaleDateString("id-ID",{dateStyle:"long"})}</p></>}</section><section className="mt-9"><div className="mb-4 flex items-center justify-between"><h2 className="text-xl font-bold">Riwayat Reservasi</h2><Link href="/my-tickets" className="text-sm text-fg-secondary hover:text-white">Lihat semua</Link></div>{loading?<div className="h-36 animate-pulse rounded-card bg-surface"/>:error?<ErrorState title="Riwayat gagal dimuat" description={error}/>:items.length===0?<p className="py-8 text-sm text-fg-muted">Belum ada riwayat reservasi.</p>:<div className="divide-y divide-line">{items.slice(0,5).map(r=><div key={r.id} className="flex items-center justify-between gap-3 py-4"><div><p className="font-semibold">{r.showtime.movie.title}</p><p className="text-xs text-fg-muted">{formatDateTime(r.showtime.startsAt)}</p></div><ReservationStatusBadge status={r.status}/></div>)}</div>}</section></Container>}

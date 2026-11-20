@@ -1,0 +1,4 @@
+"use client";
+import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/lib/utils";
+export function BookingSummary({count,price,loading,onContinue}:{count:number;price:number;loading?:boolean;onContinue:()=>void}){return <aside className="rounded-card bg-surface p-5"><h2 className="text-lg font-semibold">Ringkasan Pesanan</h2><div className="my-4 flex justify-between text-sm text-fg-secondary"><span>Jumlah kursi</span><span>{count} kursi</span></div><div className="flex justify-between text-sm text-fg-secondary"><span>Harga per kursi</span><span>{formatCurrency(price)}</span></div><div className="my-4 border-t border-line pt-4"><div className="flex justify-between font-semibold"><span>Total</span><span>{formatCurrency(count*price)}</span></div></div><Button fullWidth disabled={!count} loading={loading} onClick={onContinue}>Lanjutkan</Button><p className="mt-3 text-center text-xs text-fg-muted">Maksimal 6 kursi per reservasi</p></aside>}

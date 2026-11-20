@@ -1,0 +1,3 @@
+"use client";
+import { useEffect,useState } from "react";
+export function CountdownTimer({expiresAt,onExpire}:{expiresAt:string;onExpire?:()=>void}){const [remaining,setRemaining]=useState<number|null>(null);useEffect(()=>{const update=()=>setRemaining(Math.max(0,new Date(expiresAt).getTime()-Date.now()));update();const id=window.setInterval(update,1000);return()=>window.clearInterval(id)},[expiresAt]);useEffect(()=>{if(remaining===0)onExpire?.()},[remaining,onExpire]);if(remaining===null)return <span>--:--</span>;const mins=Math.floor(remaining/60000),secs=Math.floor(remaining%60000/1000);return <span className="tabular-nums">{String(mins).padStart(2,"0")}:{String(secs).padStart(2,"0")}</span>}
